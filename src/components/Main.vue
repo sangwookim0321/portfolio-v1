@@ -525,6 +525,9 @@ p {
   font-weight: 700;
   text-align: center;
 }
+.skill_message {
+    font-size: 20px;
+}
 .content_v_html {
   height: 100%;
   padding: 20px;
