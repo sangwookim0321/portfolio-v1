@@ -335,6 +335,7 @@ export default {
           try {
               const response = await axios.get(`http://localhost:3000/api/portfolio/${type}`)
               this.item = response.data.data
+              this.item.content = this.item.content.replace(/\n/g, '<br>')
               this.messageStatus = response.data.status
               this.message = response.data.message
           } catch (err) {
@@ -513,9 +514,10 @@ p {
   flex-direction: column;
   justify-content: center;
   width: 500px;
-  height: 50%;
+  height: 600px;
   background-color: #fff;
-  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   margin-bottom: 20px;
 }
 .skill_content span {
@@ -524,8 +526,12 @@ p {
   text-align: center;
 }
 .content_v_html {
+  height: 100%;
+  padding: 20px;
   font-size: 20px;
-  line-height: 2;
+  line-height: 1.5;
+  overflow-y: scroll;
+  font-family: 'Pretendard', sans-serif;
 }
 
 .project_container {
@@ -594,6 +600,27 @@ p {
   font-weight: 700;
   line-height: 2;
   padding: 20px;
+}
+
+/* 스크롤바 전체 스타일 */
+.content_v_html::-webkit-scrollbar {
+    width: 6px; /* 스크롤바의 너비 */
+    height: 6px; /* 스크롤바의 높이 (가로 스크롤일 경우) */
+}
+
+/* 스크롤바 트랙 (바탕) 스타일 */
+.content_v_html::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙의 배경색 */
+}
+
+/* 스크롤바 핸들 (움직이는 부분) 스타일 */
+.content_v_html::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 핸들의 색상 */
+}
+
+/* 스크롤바 핸들을 호버할 때 스타일 */
+.content_v_html::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 호버 시 핸들의 색상 */
 }
 
 @keyframes slideInFromLeft {
