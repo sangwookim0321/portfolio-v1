@@ -1,12 +1,12 @@
 <template>
-  <header :class="{'active': isActive}">
-    <ul class="header_left" :class="{'active': isActive}">
-      <li>Home</li>
+  <header :class="{'active': isScrolled}">
+    <ul class="header_left" :class="{'active': isScrolled}">
+      <li @click="scrollMove('Home')">Home</li>
     </ul>
-      <ul class="header_right" :class="{'active': isActive}">
-        <li>About</li>
-        <li>Skill</li>
-        <li>Project</li>
+      <ul class="header_right" :class="{'active': isScrolled}">
+        <li @click="scrollMove('About')">About</li>
+        <li @click="scrollMove('Skill')">Skill</li>
+        <li @click="scrollMove('Project')">Project</li>
       </ul>
   </header>
 </template>
@@ -17,18 +17,47 @@ export default {
     name: "Header",
     data() {
         return {
-            isActive: false
+            isScrolled: false,
+            isMobile: false
         }
     },
     mounted() {
+        this.checkWindowSize()
         window.addEventListener('scroll', this.handleScroll)
+        window.addEventListener('resize', this.checkWindowSize)
     },
     unmounted() {
         window.removeEventListener('scroll', this.handleScroll)
+        window.removeEventListener('resize', this.checkWindowSize)
     },
     methods: {
         handleScroll() {
-            this.isActive = window.scrollY > 0;
+            this.isScrolled = window.scrollY > 0
+        },
+        checkWindowSize() {
+            this.isMobile = window.innerWidth <= 768
+        },
+        scrollMove(type) {
+            let position
+            // 모바일 일때 true, 데스크탑 일때 false
+
+            switch (type) {
+                case 'Home':
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    break
+                case 'About':
+                    position = this.isMobile ? 300 : 400
+                    window.scrollTo({ top: position, behavior: 'smooth' })
+                    break
+                case 'Skill':
+                    position = this.isMobile ? 850 : 1100
+                    window.scrollTo({ top: position, behavior: 'smooth' })
+                    break
+                case 'Project':
+                    position = this.isMobile ? 1800 : 2200
+                    window.scrollTo({ top: position, behavior: 'smooth' })
+                    break
+            }
         }
     }
 }
@@ -39,11 +68,13 @@ header {
     position: fixed;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     transition: background-color 0.5s ease;
     width: 100%;
     text-align: center;
     color: #fff;
     z-index: 9999;
+    overflow-x: hidden;
 }
 header.active {
     background-color: #fff;
@@ -74,4 +105,18 @@ ul li:hover {
     color: #1b8888;
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    header {
+        width: unset;
+        color: #212121;
+    }
+    header.active {
+        background-color: #212121;
+    }
+    ul.active {
+        color: #fff;
+    }
+}
+
 </style>

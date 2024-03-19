@@ -81,48 +81,55 @@
   <div class="skill_container">
     <div class="skill_box">
       <div class="item_skill">
-        <div>
+        <div @click="getItem('HTML')">
           <img src="/assets/images/icon_html.svg" alt="html" />
         </div>
-        <div>
+        <div @click="getItem('CSS')">
           <img src="/assets/images/icon_css.svg" alt="css" />
         </div>
-        <div>
+        <div @click="getItem('JAVASCRIPT')">
           <img src="/assets/images/icon_javascript.svg" alt="javascript" />
         </div>
       </div>
       <div class="item_skill">
-        <div>
+        <div @click="getItem('REACT')">
           <img src="/assets/images/icon_react.svg" alt="react" />
         </div>
-        <div>
+        <div @click="getItem('VUE')">
           <img src="/assets/images/icon_vue.svg" alt="vue" />
         </div>
-        <div>
+        <div @click="getItem('SVELTE')">
           <img src="/assets/images/icon_svelte.svg" alt="svelte" />
         </div>
       </div>
       <div class="item_skill">
-        <div>
+        <div @click="getItem('NODE')">
           <img src="/assets/images/icon_node.svg" alt="node" />
         </div>
-        <div>
+        <div @click="getItem('EXPRESS')">
           <img src="/assets/images/icon_express.svg" alt="express" />
         </div>
       </div>
       <div class="item_skill">
-        <div>
+        <div @click="getItem('GITHUB')">
           <img src="/assets/images/icon_github.svg" alt="github" />
         </div>
-        <div>
+        <div @click="getItem('GITLAB')">
           <img src="/assets/images/icon_gitlab.svg" alt="gitlab" />
+        </div>
+        <div @click="getItem('POSTGRESQL')" title="실제 존재하지 않는 데이터 입니다. 예시 아이콘일 뿐입니다.">
+          <img src="/assets/images/icon_postgresql.svg" alt="icon_postgresql" />
         </div>
       </div>
     </div>
 
     <div class="skill_content_box">
-      <div class="skill_content">
-        <span>좌측 스킬 아이콘을 클릭해 주세요.</span>
+      <div style="position: relative" class="skill_content">
+        <LoadingSpinner style="position: absolute; top: 0; left: 40%" :isLoading="isLoading"/>
+        <div v-show="item.content" class="content_v_html" v-html="item.content"></div>
+      </div>
+      <div class="skill_message">
+        <p :style="{ color: messageStatus === 404 ? '#dc3545' : '#fff'}">{{ message }}</p>
       </div>
     </div>
 
@@ -300,21 +307,44 @@
 </template>
 
 <script>
+import axios from 'axios'
+import LoadingSpinner from "@/components/LoadingSpinner.vue"
 export default {
+    components: {
+        LoadingSpinner
+    },
   name: "Main",
   data() {
     return {
-      item: "",
+      item: {
+          id: 0,
+          created_at: '',
+          content: '',
+          type: '',
+      },
+        message: '스킬 아이콘을 클릭해 주세요.',
+        messageStatus: 0,
+      isLoading: false,
+      exampleMessage: ''
     }
   },
   methods: {
-    handleScroll() {
-      window.scrollBy({
-        top: 300,
-        left: 0,
-        behavior: "smooth",
-      })
-    },
+      async getItem(type) {
+          this.isLoading = true
+
+          try {
+              const response = await axios.get(`http://localhost:3000/api/portfolio/${type}`)
+              this.item = response.data.data
+              this.messageStatus = response.data.status
+              this.message = response.data.message
+          } catch (err) {
+              console.error(err)
+              this.message = err.response.data.message
+              this.messageStatus = err.response.data.status
+          } finally {
+              this.isLoading = false
+          }
+      }
   },
 }
 </script>
@@ -473,6 +503,7 @@ p {
 }
 .skill_content_box {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -481,17 +512,20 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 50%;
+  width: 500px;
   height: 50%;
   background-color: #fff;
   border-radius: 20px;
-  padding: 20px;
   margin-bottom: 20px;
 }
 .skill_content span {
   font-size: 24px;
   font-weight: 700;
   text-align: center;
+}
+.content_v_html {
+  font-size: 20px;
+  line-height: 2;
 }
 
 .project_container {
@@ -590,4 +624,93 @@ p {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 768px) {
+    .background_box {
+        height: 50vh;
+    }
+    .p1 {
+        font-size: 20px;
+    }
+    .p2 {
+        font-size: 16px;
+    }
+    .p3,
+    .p4 {
+        font-size: 14px;
+    }
+    .intro_box {
+        width: 100%;
+        justify-content: center;
+    }
+    .about_container {
+        flex-direction: column;
+        padding: 20px 0 0 20px;
+    }
+    .about_box_left {
+        justify-content: start;
+        padding: 0;
+        font-size: 30px;
+    }
+    .about_box {
+        width: 100%;
+        margin: 20px 0 70px 0;
+    }
+    .row {
+        flex-direction: column;
+    }
+    .item_text span:nth-child(1) {
+        font-size: 18px;
+    }
+    .item_text span:nth-child(2) {
+        font-size: 16px;
+    }
+    .item {
+        margin-top: 10px;
+    }
+    .skill_container {
+        flex-direction: column-reverse;
+        justify-content: unset;
+        align-items: end;
+        padding: 20px;
+    }
+    .skill_box {
+        width: 100%;
+        padding: 10px 0 0 0;
+    }
+    .item_skill {
+        justify-content: center;
+        height: 100px;
+    }
+    .item_skill div img {
+        width: 80px;
+    }
+    .skill_box_left {
+        padding: 0;
+        font-size: 30px;
+    }
+    .skill_box_left div {
+        display: flex;
+    }
+    .skill_content_box {
+        padding-top: 20px;
+    }
+    .skill_content {
+        width: 100%;
+        height: 300px;
+    }
+    .skill_message {
+        padding: 20px;
+    }
+    .content_v_html {
+        font-size: 16px;
+    }
+    .project_container {
+        padding: 20px;
+    }
+    .project_item_box {
+        width: 100%;
+    }
+}
+
 </style>
