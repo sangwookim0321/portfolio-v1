@@ -732,6 +732,9 @@ p {
     .skill_message {
         padding: 20px;
     }
+    .skill_message {
+        font-size: 16px;
+    }
     .content_v_html {
         font-size: 16px;
     }
