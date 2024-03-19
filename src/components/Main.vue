@@ -333,7 +333,7 @@ export default {
           this.isLoading = true
 
           try {
-              const response = await axios.get(`https://hardy-dev-admin-dashboard.vercel.app/api/portfolio/list/${type}`)
+              const response = await axios.get(`https://hardy-dev-admin-dashboard.vercel.app/api/portfolio/${type}`)
               this.item = response.data.data
               this.item.content = this.item.content.replace(/\n/g, '<br>')
               this.messageStatus = response.data.status
