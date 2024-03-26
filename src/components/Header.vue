@@ -108,7 +108,7 @@ ul li:hover {
 
 @media (max-width: 768px) {
     header {
-        width: unset;
+        width: 100%;
         color: #212121;
     }
     header.active {
